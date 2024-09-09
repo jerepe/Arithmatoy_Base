@@ -81,7 +81,7 @@ char *arithmatoy_add(unsigned int base, const char *lhs, const char *rhs) {
         carry = result / base; // => 16 / 10 = 1                 
         
         // store digit in buffer
-        buffer[i] = to_digit(result % base); // => 16 % 10 = 6 =>> to_digit(6) = 54      
+        buffer[i] = to_digit(result % base); // => 16 % 10 = 6 =>> to_digit(6) = 54 => buffer[0] = 54 (ASCII VALUE) 
         ++i;
     }
 
@@ -91,16 +91,14 @@ char *arithmatoy_add(unsigned int base, const char *lhs, const char *rhs) {
         i++;
     }
 
-    // add a null terminator to be able to call reverse()
-    buffer[i] = '\0';
+    // add null terminator to be able to call reverse()
+    buffer[i] = '\0'; // buffer content: 54 | 49 | '\0'
 
-    // at this point we have in the buffer, in this order: 6 | 1 | '\0'
-
-    // re-posititonning numbers properly
-    buffer = reverse(buffer); // => '\0' | 1 | 6
+    // re-position numbers properly
+    buffer = reverse(buffer); // => '\0' | 49 | 54
     
     // clean the '\0'
-    buffer = (char *) drop_leading_zeros(buffer); 
+    buffer = (char *) drop_leading_zeros(buffer); // => 49 | 54
 
     return buffer;
 }
