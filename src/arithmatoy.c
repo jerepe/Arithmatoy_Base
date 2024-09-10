@@ -4,8 +4,13 @@
 #include <string.h>
 #include "utils.h"
 
+// python -m venv .venv
 // source .venv/bin/activate 
+// python -m pip install pytest
+// python -m pytest tests/test_tp.py
 // source .devenv/bash_init.sh
+// setup
+// 
 // ctest_debug
 // .local/cmake/dist/bin/arithmatoy-cli add 10 9 12
 // sizeof(): The actual number of bits of type char is specified by the preprocessor macro CHAR_BIT, defined in the standard include file limits.h 
@@ -53,7 +58,7 @@ char *arithmatoy_add(unsigned int base, const char *lhs, const char *rhs) {
         return strdup(lhs);
     }
     
-    // reversing numbers to count from left to right + need to cast parameteres in this order to avoid type conflicts
+    // reversing numbers to count from left to right + need to cast parameteres in this order: we remove the leading zeroes to avoid the compiler to stop when encountering the null terminator, then we copy the string, and only then reverse it 
     lhs = reverse(strdup(drop_leading_zeros(lhs)));
     rhs = reverse(strdup(drop_leading_zeros(rhs)));
 
@@ -130,7 +135,7 @@ char *arithmatoy_sub(unsigned int base, const char *lhs, const char *rhs) {
     const size_t rhs_length = strlen(rhs);
     
     // check for negative result     
-    if (lhs_lentgh < rhs_length || (str_length == rhs_length && strcmp(lhs, rhs) < 0)) {
+    if (lhs_length < rhs_length || (lhs_length == rhs_length && strcmp(lhs, rhs) < 0)) {
         return NULL;
     }
    
@@ -140,7 +145,7 @@ char *arithmatoy_sub(unsigned int base, const char *lhs, const char *rhs) {
     char *buffer = (char *) malloc(buffer_length * sizeof(char));
     
     // check for 0 result
-    if (str_length == rhs_length && strcmp(lhs, rhs) == 0) {
+    if (lhs_length == rhs_length && strcmp(lhs, rhs) == 0) {
         return 0;
     }
 
