@@ -7,13 +7,15 @@
 // python -m venv .venv
 // source .venv/bin/activate 
 // python -m pip install pytest
-// python -m pytest tests/test_tp.py
+// python -m pytest /tests/test_arithmatoy.py
 // source .devenv/bash_init.sh
 // setup
-// 
+// cmake_build_debug 
 // ctest_debug
 // .local/cmake/dist/bin/arithmatoy-cli add 10 9 12
+//
 // sizeof(): The actual number of bits of type char is specified by the preprocessor macro CHAR_BIT, defined in the standard include file limits.h 
+//
 // cat /usr/include/limits.h | grep CHAR_BIT  => #  define CHAR_BIT      8
 
 
@@ -125,11 +127,11 @@ char *arithmatoy_sub(unsigned int base, const char *lhs, const char *rhs) {
         return strdup(lhs);
     }
 
-    lhs = drop_leading_zeros(lhs); // 18
-    rhs = drop_leading_zeros(rhs); // 4
+    lhs = drop_leading_zeros(lhs); // 14
+    rhs = drop_leading_zeros(rhs); // 8
 
-    lhs = reverse(strdup(lhs)); // 81
-    rhs = reverse(strdup(rhs)); // 4
+    lhs = reverse(strdup(lhs)); // 41
+    rhs = reverse(strdup(rhs)); // 8
 
     const size_t lhs_length = strlen(lhs);
     const size_t rhs_length = strlen(rhs);
@@ -153,17 +155,19 @@ char *arithmatoy_sub(unsigned int base, const char *lhs, const char *rhs) {
     unsigned int i = 0;
 
     while (i < total_length) {
-        unsigned int lhs_digit = i < lhs_length ? get_digit_value(lhs[i]) : 0; // => 8 
-        unsigned int rhs_digit = i < rhs_length ? get_digit_value(rhs[i]) : 0; // => 4 
+        unsigned int lhs_digit = i < lhs_length ? get_digit_value(lhs[i]) : 0; // => 4 
+        unsigned int rhs_digit = i < rhs_length ? get_digit_value(rhs[i]) : 0; // => 8 
 
-        unsigned int result = lhs_digit - rhs_digit - carry; // => 8 - 4 - 0 = 4
-        carry = result / base; // => 4 / 10 = 0         
-        buffer[i] = to_digit(result % base); // => 4 % 10 = 4       
+        unsigned int result = lhs_digit - rhs_digit - carry; // => 4 - 8 - 0 = -4
+
+        carry = result / base; // => -6 / 10 = 0
+         
+        if (result < 0) {
+            carry += 1; // => +1 
+        }        
+        
+        buffer[i] = to_digit(result % base); // => -4 % 10 = 4       
         ++i;
-    }
-    
-    if (result < 0) {
-        carry += 1;
     }
 
     if (carry > 0) {
